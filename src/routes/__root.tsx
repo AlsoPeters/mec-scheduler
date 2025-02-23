@@ -19,10 +19,17 @@ function RootComponent() {
         >
           Home
         </Link>{' '}
-        <Link to='/classrooms' activeProps={{className: 'font-bold',}}
-        activeOptions={{ exact: true }}
+
+        <Link to='/classrooms' activeProps={{ className: 'font-bold', }}
+          activeOptions={{ exact: true }}
         >
           Classrooms
+        </Link>
+
+        <Link to='/members' activeProps={{ className: 'font-bold', }}
+          activeOptions={{ exact: true }}
+        >
+          Members
         </Link>
       </div>
       <hr />
