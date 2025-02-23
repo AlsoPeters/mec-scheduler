@@ -11,11 +11,18 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as MembersImport } from './routes/members'
 import { Route as ClassroomsImport } from './routes/classrooms'
 import { Route as AboutImport } from './routes/about'
 import { Route as IndexImport } from './routes/index'
 
 // Create/Update Routes
+
+const MembersRoute = MembersImport.update({
+  id: '/members',
+  path: '/members',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const ClassroomsRoute = ClassroomsImport.update({
   id: '/classrooms',
@@ -60,6 +67,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ClassroomsImport
       parentRoute: typeof rootRoute
     }
+    '/members': {
+      id: '/members'
+      path: '/members'
+      fullPath: '/members'
+      preLoaderRoute: typeof MembersImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
@@ -69,12 +83,14 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/classrooms': typeof ClassroomsRoute
+  '/members': typeof MembersRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/classrooms': typeof ClassroomsRoute
+  '/members': typeof MembersRoute
 }
 
 export interface FileRoutesById {
@@ -82,14 +98,15 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/classrooms': typeof ClassroomsRoute
+  '/members': typeof MembersRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about' | '/classrooms'
+  fullPaths: '/' | '/about' | '/classrooms' | '/members'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/classrooms'
-  id: '__root__' | '/' | '/about' | '/classrooms'
+  to: '/' | '/about' | '/classrooms' | '/members'
+  id: '__root__' | '/' | '/about' | '/classrooms' | '/members'
   fileRoutesById: FileRoutesById
 }
 
@@ -97,12 +114,14 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
   ClassroomsRoute: typeof ClassroomsRoute
+  MembersRoute: typeof MembersRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
   ClassroomsRoute: ClassroomsRoute,
+  MembersRoute: MembersRoute,
 }
 
 export const routeTree = rootRoute
@@ -117,7 +136,8 @@ export const routeTree = rootRoute
       "children": [
         "/",
         "/about",
-        "/classrooms"
+        "/classrooms",
+        "/members"
       ]
     },
     "/": {
@@ -128,6 +148,9 @@ export const routeTree = rootRoute
     },
     "/classrooms": {
       "filePath": "classrooms.tsx"
+    },
+    "/members": {
+      "filePath": "members.tsx"
     }
   }
 }
