@@ -15,13 +15,21 @@ import {
    FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
+import {
+   Select,
+   SelectContent,
+   SelectItem,
+   SelectTrigger,
+   SelectValue,
+
+} from '@/components/ui/select'
 
 export const levelOptions = ['K-1', 'E-1', 'E-2', 'E-3', 'Junior', 'Adult'] as const
 
 const formSchema = z.object({
    firstName: z.string().min(2).max(50),
    lastName: z.string().min(2).max(50),
-   age: z.number().min(1).max(100),
+   age: z.coerce.number().min(1).max(100),
    level: z.enum(levelOptions)
 
 })
@@ -41,10 +49,11 @@ const AddMemberForm = () => {
 
       },
    })
+   console.log('Form Errors:', form.formState.errors)
 
    function onSubmit(values: z.infer<typeof formSchema>) {
-      console.log('CLICKED')
-      console.log(values)
+      console.log('CLICKED - Success')
+      console.log('Values:', values)
    }
 
    const addMember = async () => {
@@ -60,20 +69,70 @@ const AddMemberForm = () => {
    return (
       <>
          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+            <form onSubmit={form.handleSubmit(onSubmit, (errors) => console.log('Validation Errors:', errors))} className="space-y-8">
                <FormField
                   control={form.control}
                   name="firstName"
                   render={({ field }) => (
                      <FormItem>
-                        <FormLabel>Username</FormLabel>
+                        <FormLabel>First Name</FormLabel>
                         <FormControl>
-                           <Input placeholder="First Name" {...field} />
+                           <Input className="w-48" placeholder="First Name" {...field} />
                         </FormControl>
                         <FormDescription>
-                           This is your public display name.
+                           Members First Name.
                         </FormDescription>
                         <FormMessage />
+                     </FormItem>
+                  )}
+               />
+               <FormField
+                  control={form.control}
+                  name="lastName"
+                  render={({ field }) => (
+                     <FormItem>
+                        <FormLabel>Last Name</FormLabel>
+                        <FormControl>
+                           <Input className="w-48" placeholder="Last Name" {...field} />
+                        </FormControl>
+                        <FormDescription>
+                           Members Last Name.
+                        </FormDescription>
+                        <FormMessage />
+                     </FormItem>
+                  )}
+               />
+               <FormField
+                  control={form.control}
+                  name="age"
+                  render={({ field }) => (
+                     <FormItem>
+                        <FormLabel>Age</FormLabel>
+                        <FormControl>
+                           <Input className="w-48" type="number" placeholder="" {...field} />
+                        </FormControl>
+                        <FormDescription>
+                           Members Age.
+                        </FormDescription>
+                        <FormMessage />
+                     </FormItem>
+                  )}
+               />
+               <FormField
+                  control={form.control}
+                  name="level"
+                  render={({ field }) => (
+                     <FormItem>
+                        <Select>
+                           <FormLabel>Level</FormLabel>
+                           <SelectTrigger className="w-48">
+                              <SelectValue placeholder="Level" />
+                           </SelectTrigger>
+                           <SelectContent>
+                              {levelOptions.map((level) => <SelectItem id={level} value={level}>{level}</SelectItem>)}
+                           </SelectContent>
+                        </Select>
+
                      </FormItem>
                   )}
                />
