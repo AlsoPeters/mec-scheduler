@@ -30,10 +30,10 @@ function RootComponent() {
           Classrooms
         </Link>
 
-        <Link to='/members' activeProps={{ className: 'font-bold', }}
+        <Link to='/students' activeProps={{ className: 'font-bold', }}
           activeOptions={{ exact: true }}
         >
-          Members
+          Students
         </Link>
       </div>
       <hr />

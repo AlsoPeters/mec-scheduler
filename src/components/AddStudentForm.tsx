@@ -36,7 +36,7 @@ const formSchema = z.object({
 
 export type FormValues = z.infer<typeof formSchema>
 
-const AddMemberForm = () => {
+const AddStudentForm = () => {
    const supabase = useSupabase()
 
    const form = useForm<z.infer<typeof formSchema>>({
@@ -51,25 +51,22 @@ const AddMemberForm = () => {
    })
    console.log('Form Errors:', form.formState.errors)
 
-   function onSubmit(values: z.infer<typeof formSchema>) {
+   const addMember = async (values: z.infer<typeof formSchema>) => {
       console.log('CLICKED - Success')
       console.log('Values:', values)
-   }
-
-   const addMember = async () => {
-      const { data, error } = await supabase.from('students').insert(userInputs)
+      const { data, error } = await supabase.from('students').insert(values)
       if (error) console.error('Error:', error)
       else console.log('Member added!')
    }
 
 
    // Add 'select' for Student or Teacher
-   // Add Dropdown for Level
+
 
    return (
       <>
          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit, (errors) => console.log('Validation Errors:', errors))} className="space-y-8">
+            <form onSubmit={form.handleSubmit(addMember, (errors) => console.log('Validation Errors:', errors))} className="space-y-8">
                <FormField
                   control={form.control}
                   name="firstName"
@@ -79,9 +76,6 @@ const AddMemberForm = () => {
                         <FormControl>
                            <Input className="w-48" placeholder="First Name" {...field} />
                         </FormControl>
-                        <FormDescription>
-                           Members First Name.
-                        </FormDescription>
                         <FormMessage />
                      </FormItem>
                   )}
@@ -95,9 +89,6 @@ const AddMemberForm = () => {
                         <FormControl>
                            <Input className="w-48" placeholder="Last Name" {...field} />
                         </FormControl>
-                        <FormDescription>
-                           Members Last Name.
-                        </FormDescription>
                         <FormMessage />
                      </FormItem>
                   )}
@@ -111,9 +102,6 @@ const AddMemberForm = () => {
                         <FormControl>
                            <Input className="w-48" type="number" placeholder="" {...field} />
                         </FormControl>
-                        <FormDescription>
-                           Members Age.
-                        </FormDescription>
                         <FormMessage />
                      </FormItem>
                   )}
@@ -123,16 +111,19 @@ const AddMemberForm = () => {
                   name="level"
                   render={({ field }) => (
                      <FormItem>
-                        <Select>
-                           <FormLabel>Level</FormLabel>
-                           <SelectTrigger className="w-48">
-                              <SelectValue placeholder="Level" />
-                           </SelectTrigger>
-                           <SelectContent>
-                              {levelOptions.map((level) => <SelectItem id={level} value={level}>{level}</SelectItem>)}
-                           </SelectContent>
-                        </Select>
+                        <FormLabel>Level</FormLabel>
+                        <FormControl>
+                           <Select onValueChange={field.onChange} value={field.value}>
 
+                              <SelectTrigger className="w-48">
+                                 <SelectValue placeholder="Level" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                 {levelOptions.map((level) => <SelectItem key={level} value={level}>{level}</SelectItem>)}
+                              </SelectContent>
+                           </Select>
+                        </FormControl>
+                        <FormMessage />
                      </FormItem>
                   )}
                />
@@ -144,4 +135,4 @@ const AddMemberForm = () => {
    )
 }
 
-export default AddMemberForm
+export default AddStudentForm
